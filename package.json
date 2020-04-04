@@ -1,0 +1,22 @@
+{
+  "name": "fast-reads",
+  "version": "0.0.1",
+  "description": "A tool for fast reading pdf docs",
+  "main": "src/main.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "animate.css": "^3.7.2",
+    "bootstrap": "^4.4.1",
+    "electron": "^8.2.0",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.16.1"
+  }
+}
