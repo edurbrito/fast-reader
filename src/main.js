@@ -12,7 +12,7 @@ function createWindow () {
     webPreferences: {
       nodeIntegration: true
     },
-    resizable: false
+    resizable: true
   })
 
   // and load the index.html of the app.
@@ -54,6 +54,10 @@ app.on('activate', () => {
   }
 })
 
+function shrinkPath(path){
+  return new String(path);
+}
+
 const dialog = require('electron').dialog;
 
 ipcMain.on('open-file-dialog', async() => {
@@ -78,7 +82,9 @@ ipcMain.on('open-file-dialog', async() => {
   
     // Log the Files to the Console
     const filePath = files.filePaths[0];
-    // console.log(filePath);
+
+
+
     win.webContents.send("selected-file", filePath);
 
 })

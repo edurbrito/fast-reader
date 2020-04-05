@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="../node_modules/animate.css/animate.min.css">
     <link rel="stylesheet" href="../node_modules/animate.css/animate.min.css">
     <style>
-      
       body {
         background-color: black;
         color: white;
@@ -25,22 +24,40 @@
         height: 100vh;
       }
 
-      .v-middle{
-        align-items:center;
-        display: flex;
+      .container{
+        min-height: 100%;
+        overflow: hidden;
       }
 
-      #ui {
+      .page1{
+        position: absolute;
         width: 100%;
-        padding-top: 100px;
-        padding-bottom: 100px;
+        bottom: 0;
+        padding-right: 10px;
+        animation-name: slideInRight;
+        animation-duration: 2s;
+        animation-delay: 0s;
+        animation-iteration-count: 1;
+        animation-fill-mode: both;
+      }
+
+      .img-page1{
+        margin-top: 28%;
+        margin-bottom: 48%;
+      }
+
+      .text-page1{ 
+        margin-top: 28%;
+        padding-top: 10%;
+        margin-bottom: 48%;
+        padding-bottom: 10%;
         border-left: 10px solid white;
         border-radius: 5px;
         padding-left: 20px;
         background-color: black;
       }
 
-      .text {
+      .text{
         font-family: Montserrat; 
         font-weight: bold;
         font-size: 60px;
@@ -92,31 +109,21 @@
         margin: 0;
         margin-top: 10px;
       }
-      
-      .img-page1 {
-        animation-name: slideInRight;
-        animation-duration: 2s;
-        animation-delay: 0s;
-        animation-iteration-count: 1;
-        animation-fill-mode: both;
-      }
 
     </style>
   </head>
   <body>
-    <div class="container h-100 mh-100" id="mainContainer">
-      <div class="row" style="width: 100%; height: 100%;">
-        <div class="col-sm-5 v-middle">
-          <img class="img-fluid img-page1" src="../images/page1.png">
+    <div class="container h-100 mh-100 align-middle" id="mainContainer">
+      <div class="row" style="width: 100%;">
+        <div class="col-sm-5 img-page1">
+          <img class="img-fluid page1" src="../images/page1.png">
         </div>
-        <div class="col-sm-7 v-middle">
-          <di id="ui">
-            <h1 class="text">FAST<br>READER</h1>
-            <br>
-            <button class="btn btn-dark button" id="chooseFile" onclick="chooseFile()">CHOOSE FILE</button>
-            <button class="btn btn-dark" id="startReading" onclick="startReading()">START READING</button>
-            <h6 id="chFileLabel" class="label">Nothing Selected</h6>
-          </di>
+        <div class="col-sm-7 text-page1">
+          <h1 class="text">FAST<br>READER</h1>
+          <br>
+          <button class="btn btn-dark button" id="chooseFile" onclick="chooseFile()">CHOOSE FILE</button>
+          <button class="btn btn-dark" id="startReading" onclick="startReading()">START READING</button>
+          <h6 id="chFileLabel" class="label">Nothing Selected</h6>
         </div>
       </div>
     </div>
