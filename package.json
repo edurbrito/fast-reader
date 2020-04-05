@@ -3,11 +3,8 @@
   "version": "0.0.1",
   "description": "A tool for fast reading pdf docs",
   "main": "src/main.js",
-  "directories": {
-    "test": "tests"
-  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "electron ."
   },
   "author": "",
@@ -19,5 +16,8 @@
     "jquery": "^3.4.1",
     "path": "^0.12.7",
     "popper.js": "^1.16.1"
+  },
+  "devDependencies": {
+    "mocha": "^7.1.1"
   }
 }

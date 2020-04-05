@@ -1,4 +1,5 @@
 const { app, BrowserWindow , ipcMain } = require('electron')
+const utils = require('./utils.js')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -35,7 +36,7 @@ function createWindow () {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+app.on('ready', createWindow);
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
@@ -53,19 +54,6 @@ app.on('activate', () => {
     createWindow()
   }
 })
-
-function shrinkPath(path){
-  var newPath = new String(path);
-  
-  for (var i = newPath.length; i > 0; i--){
-    if (newPath.charAt(i) == '/' || newPath.charAt(i) == '\\')
-      break;
-  }
-
-  
-
-  return new String("...").concat(newPath.substring(i));
-}
 
 const dialog = require('electron').dialog;
 
@@ -92,7 +80,7 @@ ipcMain.on('open-file-dialog', async() => {
     // Log the Files to the Console
     const filePath = files.filePaths[0];
 
-    win.webContents.send("selected-file", shrinkPath(filePath));
+    win.webContents.send("selected-file", utils.shrinkPath(filePath));
 
 })
 
