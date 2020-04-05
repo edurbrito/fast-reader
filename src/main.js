@@ -11,7 +11,8 @@ function createWindow () {
     height: 700,
     webPreferences: {
       nodeIntegration: true
-    }
+    },
+    resizable: false
   })
 
   // and load the index.html of the app.
@@ -27,6 +28,8 @@ function createWindow () {
     // when you should delete the corresponding element.
     win = null
   })
+
+  // win.setMenu(null);
 }
 
 // This method will be called when Electron has finished
@@ -49,4 +52,39 @@ app.on('activate', () => {
   if (win === null) {
     createWindow()
   }
+})
+
+const dialog = require('electron').dialog;
+
+ipcMain.on('open-file-dialog', async() => {
+  
+    //This operation is asynchronous and needs to be awaited
+    const files = await dialog.showOpenDialog({
+      // The Configuration object sets different properties on the Open File Dialog 
+      properties: ['openFile'],
+      filters: [{name: 'PDF files', extensions: ['pdf']}]
+    });
+  
+    // If we don't have any files, return early from the function
+    if (!files) {
+        return;
+    }
+  
+    // Pulls the first file out of the array
+  
+    //const file = files[0];
+    // Reads from the file and converts the resulting buffer to a string
+    //const content = fs.readFileSync(file).toString();
+  
+    // Log the Files to the Console
+    const filePath = files.filePaths[0];
+    // console.log(filePath);
+    win.webContents.send("selected-file", filePath);
+
+})
+
+ipcMain.on("start-reading", function(event){
+    win.resizable = true;
+    win.setSize(800,300,true);
+    setTimeout(function(){ win.loadFile("src/index.html");},200);
 })

@@ -75,7 +75,7 @@
 
       .button{
         width: 90%; 
-        background-color: #E8505B; 
+        background-color: #883035; 
         font-size: 20px;
         overflow: hidden; /* Ensures the content is not revealed until the animation */
         white-space: nowrap; /* Keeps the content on a single line */
@@ -91,10 +91,26 @@
         to { width: 90% }
       }
 
+      #chFileLabel{
+        margin-top: 40px;
+        opacity: 20%;
+        font-size: 16px;
+        position: absolute;
+      }
+
+      #startReading{
+        width: 90%; 
+        background-color: #E8505B;
+        font-size: 16px;
+        display: none; 
+        margin: 0;
+        margin-top: 10px;
+      }
+
     </style>
   </head>
   <body>
-    <div class="container h-100 mh-100 align-middle">
+    <div class="container h-100 mh-100 align-middle" id="mainContainer">
       <div class="row" style="width: 100%;">
         <div class="col-sm-5 img-page1">
           <img class="img-fluid page1" src="../images/page1.png">
@@ -102,10 +118,14 @@
         <div class="col-sm-7 text-page1">
           <h1 class="text">FAST<br>READER</h1>
           <br>
-          <button class="btn btn-dark button">CHOOSE FILE</button>
+          <button class="btn btn-dark button" id="chooseFile" onclick="chooseFile()">CHOOSE FILE</button>
+          <button class="btn btn-dark" id="startReading" onclick="startReading()">START READING</button>
+          <h6 id="chFileLabel" class="label">Nothing Selected</h6>
         </div>
       </div>
     </div>
+
+    <script src="ui.js"></script>
     <!-- Bootstrap Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script>let $ = require('jquery');</script>
