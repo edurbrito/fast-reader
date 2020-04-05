@@ -1,5 +1,5 @@
 {
-  "name": "fast-reads",
+  "name": "fast-reader",
   "version": "0.0.1",
   "description": "A tool for fast reading pdf docs",
   "main": "src/main.js",
