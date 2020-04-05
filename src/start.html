@@ -16,11 +16,29 @@
     <link rel="stylesheet" href="../node_modules/animate.css/animate.min.css">
     <style>
       
+      /* width */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      /* Track */
+      ::-webkit-scrollbar-track {
+        background: #000000; 
+      }
+      
+      /* Handle */
+      ::-webkit-scrollbar-thumb {
+        background: #888; 
+      }
+
+      /* Handle on hover */
+      ::-webkit-scrollbar-thumb:hover {
+        background: #555; 
+      }
+
       body {
         background-color: black;
-        color: white;
-        height: 100%;
-        overflow-y: hidden;
+        color: white;      
         width: 100vw;
         height: 100vh;
       }
@@ -62,6 +80,7 @@
       .button{
         width: 90%; 
         background-color: #883035; 
+        border-color: #883035;
         font-size: 20px;
         overflow: hidden; /* Ensures the content is not revealed until the animation */
         white-space: nowrap; /* Keeps the content on a single line */
@@ -87,6 +106,7 @@
       #startReading{
         width: 90%; 
         background-color: #E8505B;
+        border-color: #E8505B;
         font-size: 16px;
         display: none; 
         margin: 0;

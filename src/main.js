@@ -55,7 +55,16 @@ app.on('activate', () => {
 })
 
 function shrinkPath(path){
-  return new String(path);
+  var newPath = new String(path);
+  
+  for (var i = newPath.length; i > 0; i--){
+    if (newPath.charAt(i) == '/' || newPath.charAt(i) == '\\')
+      break;
+  }
+
+  
+
+  return new String("...").concat(newPath.substring(i));
 }
 
 const dialog = require('electron').dialog;
@@ -83,14 +92,12 @@ ipcMain.on('open-file-dialog', async() => {
     // Log the Files to the Console
     const filePath = files.filePaths[0];
 
-
-
-    win.webContents.send("selected-file", filePath);
+    win.webContents.send("selected-file", shrinkPath(filePath));
 
 })
 
 ipcMain.on("start-reading", function(event){
-    win.resizable = true;
-    win.setSize(800,300,true);
+    win.setSize(1000,190,true);
+    win.resizable = false;
     setTimeout(function(){ win.loadFile("src/index.html");},200);
 })
