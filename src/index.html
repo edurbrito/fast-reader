@@ -60,11 +60,8 @@
         width: 100%; 
         text-align: center;
         font-size: 40px;
-        bottom: 55%; 
+        bottom: 62%; 
         position: fixed;
-      }
-      .custom-range {
-        padding-top: 4%;
       }
 
       .custom-range::-webkit-slider-thumb {
@@ -77,15 +74,25 @@
         height: 2px;
       }
 
-      .label {
-        color: #212529;
-        position: absolute;
-        bottom: 14%;
-      }
-
       .controller {
         margin: 2px;
         padding: 6px 12px 6px 12px;
+      }
+
+      #panel-info {
+        width: 100%;
+        color: #212529;
+        text-align: center;
+        margin-top: 0px;
+        margin-bottom: 0px;
+      }
+
+      #page-index {
+        text-align: left;
+      }
+
+      #rate-value {
+        text-align: right;
       }
 
     </style>
@@ -109,14 +116,19 @@
       <div id="control-panel">
         <div class="container-sm" style="text-align: center;">
           <button type="button" class="btn btn-outline-dark rounded-circle controller"><<</button>
-          <button type="button" class="btn btn-outline-dark rounded-circle controller"><</button>
-          <button type="button" class="btn btn-outline-dark rounded-circle controller">-</button>
+          <button type="button" class="btn btn-outline-dark rounded-circle controller" onclick="buttonPreviousWord()"><</button>
+          <button type="button" class="btn btn-outline-dark rounded-circle controller" onclick="buttonDecRate()">-</button>
           <button type="button" class="btn btn-outline-dark rounded-circle controller" id="btn-play" onclick="buttonPlay()">l></button>
-          <button type="button" class="btn btn-outline-dark rounded-circle controller">+</button>
-          <button type="button" class="btn btn-outline-dark rounded-circle controller">></button>
+          <button type="button" class="btn btn-outline-dark rounded-circle controller" onclick="buttonIncRate()">+</button>
+          <button type="button" class="btn btn-outline-dark rounded-circle controller" onclick="buttonNextWord()">></button>
           <button type="button" class="btn btn-outline-dark rounded-circle controller">>></button>
         </div> 
-        <label class="label">Page 1</label>
+        <div class="container-sm" id="panel-info">
+          <div class="row">
+            <div id="page-index" class="col">Page: 1</div>
+            <div id="rate-value" class="col">Rate: 180</div>
+          </div>
+        </div>
         <input type="range" class="custom-range" id="range-bar" value="0">
       </div>
 

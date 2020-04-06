@@ -6,7 +6,7 @@ const utils = require('./utils.js')
 let win
 
 let start_reading = function() {
-  win.setSize(1000,180,true);
+  win.setSize(1000,200,true);
   win.resizable = true;
   // win.setMenu(null);
   setTimeout(function(){win.loadFile("src/index.html");},100);
