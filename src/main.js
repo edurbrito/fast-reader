@@ -6,7 +6,7 @@ const utils = require('./utils.js')
 let win
 
 let start_reading = function() {
-  win.setSize(1000,168,true);
+  win.setSize(1000,180,true);
   win.resizable = true;
   // win.setMenu(null);
   setTimeout(function(){win.loadFile("src/index.html");},100);
@@ -36,7 +36,7 @@ function createWindow () {
     // when you should delete the corresponding element.
     win = null
   })
-  
+
   start_reading();
   // win.setMenu(null);
 }

@@ -1,4 +1,5 @@
 var text;
+var index;
 
 if (text == undefined){
     self.addEventListener('message' , function(e){
@@ -14,25 +15,29 @@ else{
 var data = {};
 
 function updateWord(){
-    rate = 180;
-    if (index > 0)
-        data.before_word = text[index - 1];
+    var rate = 180;
+    var word = text[index.i];
+
+    if (index.i > 0)
+        data.before_word = text[index.i - 1];
     else
         data.before_word = "";
-    data.word = text[index];
-    if (index < text.length - 1)
-        data.after_word = text[index + 1];
+    
+    data.word = word;
+    
+    if (index.i < text.length - 1)
+        data.after_word = text[index.i + 1];
     else
         data.after_word = "";
     
-    if (text[index].length <= 4){
-        rate = 300;
+    if (word != undefined && (word.length <= 5 || word[word.length - 1] == '.')){
+        rate = 400;
     }
 
-    index++;
+    index.i++;
     data.index = index;
 
     postMessage(data);
-    if (index < text.length)
+    if (index.i < text.length)
         setTimeout(function(){updateWord()},rate);
 }
