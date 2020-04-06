@@ -40,8 +40,14 @@
         color: white;      
         width: 100vw;
         height: 100vh;
+        font-family: 'Montserrat';
       }
       
+      .v-middle{
+        align-items:center;
+        display: grid;
+      }
+
       #control-panel {
         width: 100%; 
         bottom: 10%;
@@ -54,20 +60,32 @@
         width: 100%; 
         text-align: center;
         font-size: 40px;
-        bottom: 50%; 
+        bottom: 60%; 
         position: fixed;
       }
-
       .custom-range {
         padding-top: 4%;
       }
 
       .custom-range::-webkit-slider-thumb {
-        background: red;
+        background: #212529;
+        height: 10px;
       }
 
       .custom-range::-webkit-slider-runnable-track {
-        background-color: red;
+        background-color: #343a40;
+        height: 2px;
+      }
+
+      .label {
+        color: #212529;
+        position: absolute;
+        bottom: 14%;
+      }
+
+      .controller {
+        margin: 2px;
+        padding: 6px 12px 6px 12px;
       }
 
     </style>
@@ -76,13 +94,13 @@
       <div id="word-reader">
         <div class="container">
           <div class="row">
-            <div class="col-sm" style="text-align: right;">
+            <div class="col-sm v-middle" style="text-align: right; font-size: 24px; opacity: 0.2;" id="before-word">
               sjsj
             </div>
-            <div class="col-sm">
-              snsssjsassasaasaashsasas
+            <div class="col-sm v-middle" style="font-size: 44px; flex: 0 0 300px;" id="word">
+              sou
             </div>
-            <div class="col-sm" style="text-align: left;">
+            <div class="col-sm v-middle" style="text-align: left; font-size: 24px; opacity: 0.1;" id="after-word">
               sjsjsj
             </div>
           </div>
@@ -90,18 +108,19 @@
       </div>
       <div id="control-panel">
         <div class="container-sm" style="text-align: center;">
-          <button>A</button>
-          <button>B</button>
-          <button>C</button>
-          <button>D</button>
-          <button>E</button>
-          <button>F</button>
-          <button>G</button>
+          <button type="button" class="btn btn-outline-dark rounded-circle controller"><<</button>
+          <button type="button" class="btn btn-outline-dark rounded-circle controller"><</button>
+          <button type="button" class="btn btn-outline-dark rounded-circle controller">-</button>
+          <button type="button" class="btn btn-outline-dark rounded-circle controller" id="btn-play" onclick="buttonPlay()">l></button>
+          <button type="button" class="btn btn-outline-dark rounded-circle controller">+</button>
+          <button type="button" class="btn btn-outline-dark rounded-circle controller">></button>
+          <button type="button" class="btn btn-outline-dark rounded-circle controller">>></button>
         </div> 
-        <input type="range" class="custom-range" id="customRange1">
+        <label class="label">Page 1</label>
+        <input type="range" class="custom-range" id="range-bar" value="0">
       </div>
 
-    <script src="ui.js"></script>
+    <script src="controls.js"></script>
     <!-- Bootstrap Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script>let $ = require('jquery');</script>

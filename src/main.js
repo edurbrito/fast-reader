@@ -81,11 +81,13 @@ ipcMain.on('open-file-dialog', async() => {
     const filePath = files.filePaths[0];
 
     win.webContents.send("selected-file", utils.shrinkPath(filePath));
-
 })
 
 ipcMain.on("start-reading", function(event){
-    win.setSize(1000,190,true);
-    win.resizable = false;
-    setTimeout(function(){ win.loadFile("src/index.html");},200);
+    win.setSize(1000,168,true);
+    win.resizable = true;
+    // win.setMenu(null);
+    setTimeout(function(){ 
+      win.loadFile("src/index.html");
+  },100);
 })
