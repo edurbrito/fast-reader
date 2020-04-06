@@ -19,6 +19,15 @@ var data = {};
 
 function updateWord(){
     var currRate = rate;
+
+    index.i++;
+    data.index = index;
+
+    if (index.i == text.length){
+        postMessage(data);
+        return;
+    }
+
     var word = text[index.i];
 
     if (index.i > 0)
@@ -37,8 +46,6 @@ function updateWord(){
         currRate = rate * 2.2;
     }
 
-    index.i++;
-    data.index = index;
 
     postMessage(data);
     if (index.i < text.length)
