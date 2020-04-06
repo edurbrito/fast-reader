@@ -1,40 +1,38 @@
 const {ipcRenderer} = require('electron');
 
-var text = ["Eu","sou","eu","e","mais","ninguém","aqui","para","mim."];
-var nIntervId, updt , i = 0; // Time interval between words, update Word shadow function, index of the current word displayed , response to Main shadow function
-var rate = 180; // Time in ms between words
+var bPlay = document.getElementById('btn-play');
 var before_word = document.getElementById('before-word');
 var word = document.getElementById('word');
 var after_word = document.getElementById('after-word');
-
-updt = function updateWord(){
-    rate = 180;
-    if (i > 0)
-        before_word.textContent = text[i - 1];
-    else
-        before_word.textContent = "";
-    word.textContent = text[i];
-    if (i < text.length - 1)
-        after_word.textContent = text[i + 1];
-    else
-        after_word.textContent = "";
-    i++;
-    if (i == text.length){
-        i = 0;
-    }
-    if (text[i].length <= 3){
-        rate = 300;
-    }
-    clearInterval(nIntervId);
-    nIntervId = setInterval(function(){updt();}, rate);
-}
+var w = undefined;
+var index = 0;
+var text = ["Eu","sou","eu","e","mais","ninguém","aqui","para","mim."];
 
 function buttonPlay(){
-    var bPlay = document.getElementById('btn-play');
     
-    bPlay.textContent = "ll";
-
-    var i = 0;
-    clearInterval(nIntervId);
-    nIntervId = setInterval(function(){updt();}, rate);
+    if (w == undefined){
+        w = new Worker("play-pause.js");
+        data = {index: index, text: text};
+        w.postMessage(data);
+        w.onmessage = function(event) {
+            bPlay.textContent = "ll";
+            before_word.textContent = event.data.before_word;
+            after_word.textContent = event.data.after_word;
+            word.textContent = event.data.word;
+            index = event.data.index;
+            
+            if (index == text.length){
+                w.terminate();
+                w = undefined;
+                bPlay.textContent = "l>";
+                index = 0;
+            }
+        };
+    }
+    else {
+        w.terminate();
+        w = undefined;
+        bPlay.textContent = "l>";
+    }
+    
 }

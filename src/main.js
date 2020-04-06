@@ -5,6 +5,13 @@ const utils = require('./utils.js')
 // be closed automatically when the JavaScript object is garbage collected.
 let win
 
+let start_reading = function() {
+  win.setSize(1000,168,true);
+  win.resizable = true;
+  // win.setMenu(null);
+  setTimeout(function(){win.loadFile("src/index.html");},100);
+}
+
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
@@ -29,7 +36,8 @@ function createWindow () {
     // when you should delete the corresponding element.
     win = null
   })
-
+  
+  start_reading();
   // win.setMenu(null);
 }
 
@@ -84,10 +92,5 @@ ipcMain.on('open-file-dialog', async() => {
 })
 
 ipcMain.on("start-reading", function(event){
-    win.setSize(1000,168,true);
-    win.resizable = true;
-    // win.setMenu(null);
-    setTimeout(function(){ 
-      win.loadFile("src/index.html");
-  },100);
+    start_reading();
 })
