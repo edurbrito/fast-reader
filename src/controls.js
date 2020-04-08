@@ -1,40 +1,33 @@
 const {ipcRenderer} = require('electron');
 
-var bPlay = document.getElementById('btn-play');
 var before_word = document.getElementById('before-word');
 var word = document.getElementById('word');
 var after_word = document.getElementById('after-word');
+var bPlay = document.getElementById('btn-play');
 var label_rate = document.getElementById('rate-value');
+var label_page = document.getElementById('page-index');
+var range_bar = document.getElementById('range-bar');
 
-var index = {i:-1};
 var text = ["Eu","sou","eu","e","mais","ninguém","diligente","sábio","culto","aqui","só","para","mim."];
-// text = ["Her","life","in","the","confines","of","the","house","became","her","new","normal.",
-// "I","want","more","detailed","information.",
-// "Charles","ate","the","french","fries","knowing","they","would","be","his","last","meal.",
-// "Buried","deep","in","the","snow,","he","hoped","his","batteries","were","fresh","in","his","avalanche","beacon.",
-// "They're","playing","the","piano","while","flying","in","the","plane.",
-// "The","beauty","of","the","African","sunset","disguised","the","danger","lurking","nearby.",
-// "The","sun","had","set","and","so","had","his","dreams.",
-// "She","works","two","jobs","to","make","ends","meet;","at","least,","that","was","her","reason","for","not","having","time","to","join","us.",
-// "8%","of","25","is","the","same","as","25%","of","8","and","one","of","them","is","much","easier","to","do","in","your","head.",
-// "I","checked","to","make","sure","that","he","was","still","alive."];
-var data = {index: index, text: text, rate: 180};
+// text = ["Her","life","in","the","confines","of","the","house","became","her","new","normal.", "I","want","more","detailed","information.","Charles","ate","the","french","fries","knowing","they","would","be","his","last","meal.","Buried","deep","in","the","snow,","he","hoped","his","batteries","were","fresh","in","his","avalanche","beacon.","They're","playing","the","piano","while","flying","in","the","plane.","The","beauty","of","the","African","sunset","disguised","the","danger","lurking","nearby.","The","sun","had","set","and","so","had","his","dreams.","She","works","two","jobs","to","make","ends","meet;","at","least,","that","was","her","reason","for","not","having","time","to","join","us.","8%","of","25","is","the","same","as","25%","of","8","and","one","of","them","is","much","easier","to","do","in","your","head.","I","checked","to","make","sure","that","he","was","still","alive."];
+var data = {index: 0, text: text, rate: 180};
 
 class PlayPauseWorker {
     
-    constructor(script,data){
+    constructor(script,text,rate){
         this.script = script;
-        this.data = data;
+        this.data = {index: 0, text: text, rate: rate};
         this.w = undefined;
-        this.onPause = true;
+        this.setText();
+        range_bar.step = 1;
+        range_bar.max = this.data.text.length;
     }
 
     initWorker = function(restart) {
-        this.onPause = false;
         if (this.w == undefined){
             this.w = new Worker(this.script);
-            this.postMessage();            
             this.onmessage();
+            this.postMessage();            
         }
         else{
             this.terminate();
@@ -55,19 +48,39 @@ class PlayPauseWorker {
     };
 
     onmessage = function() {
+        let currWorker = this;
         this.w.onmessage = function(event){
             bPlay.textContent = "ll";
             before_word.textContent = event.data.before_word;
             after_word.textContent = event.data.after_word;
             word.textContent = event.data.word;
-            index.i = event.data.index.i;
-            data.index = index;
-            if (index.i == data.text.length){
+            currWorker.setIndex(event.data.index,false);
+            label_page.textContent = "Page: " + playPauseWorker.getIndex();
+            range_bar.value = playPauseWorker.getIndex();
+            if (currWorker.getIndex() == currWorker.data.text.length){
                 bPlay.textContent = "l>";
-                index.i = -1;
+                currWorker.setIndex(currWorker.data.text.length - 1,false);
             }
         }
     };
+
+    setIndex = function(index, run) {
+        this.data.index = index;
+        if (this.w != undefined && run)
+            this.postMessage();
+    }
+
+    getIndex = function () {
+        return this.data.index;
+    }
+
+    increaseIndex = function() {
+        return this.data.index++;
+    }
+
+    decreaseIndex = function() {
+        return this.data.index--;
+    }
 
     setRate = function (rate) {
         this.data.rate = rate;
@@ -80,7 +93,7 @@ class PlayPauseWorker {
     }
 
     increaseRate = function (){
-        if (this.data.rate > 0){
+        if (this.data.rate > 10){
             this.data.rate -= 10;
             if (this.w != undefined)
                 this.postMessage();
@@ -96,30 +109,35 @@ class PlayPauseWorker {
     }
 
     setText = function(){
-        if (index.i > 0)
-            before_word.textContent = text[index.i - 1];
+        var i = this.data.index
+        if (i > 0)
+            before_word.textContent = this.data.text[i - 1];
         else
             before_word.textContent = "";
         
-        word.textContent = text[index.i];
+        word.textContent = this.data.text[i];
         
-        if (index.i < text.length - 1)
-            after_word.textContent = text[index.i + 1];
+        if (i < this.data.text.length - 1)
+            after_word.textContent = this.data.text[i + 1];
         else
             after_word.textContent = "";
     }
+
+    onPause = function() {
+        return bPlay.textContent == "l>";
+    }
 }
 
-var playPauseWorker = new PlayPauseWorker("play-pause.js",data);
+let playPauseWorker = new PlayPauseWorker("play-pause.js",text,180);
 
 function buttonPlay (){
-    if (data.index.i < 0){
+    console.log(playPauseWorker.getIndex() == playPauseWorker.data.text.length - 1 );
+    if (playPauseWorker.getIndex() == 0 || playPauseWorker.getIndex() == playPauseWorker.data.text.length - 1){ // It means that text has not STARTed 
+        playPauseWorker.setIndex(0,false);
         playPauseWorker.initWorker(true); 
-        playPauseWorker.onPause = false; 
     }
     else{
-        playPauseWorker.initWorker(false); 
-        playPauseWorker.onPause = true; 
+        playPauseWorker.initWorker(false);
     } 
 }
 
@@ -134,22 +152,81 @@ function buttonDecRate (){
 }
 
 function buttonNextWord (){
-    if(playPauseWorker.onPause){
-        console.log("ON PAUSE - INC",index.i);
-        if(index.i < text.length - 1)
-            index.i += 1;
-
+    if(playPauseWorker.onPause()){
+        if(playPauseWorker.getIndex() < playPauseWorker.data.text.length - 1){
+            playPauseWorker.increaseIndex();
+        }
+        else{
+            playPauseWorker.setIndex(0,false);
+        }
         playPauseWorker.setText();
+        label_page.textContent = "Page: " + playPauseWorker.getIndex();
+        range_bar.value = playPauseWorker.getIndex();
+
     }
 }
 
 function buttonPreviousWord (){
 
-    if(playPauseWorker.onPause){
-        console.log("ON PAUSE - DEC",index.i);
-        if(index.i > 0)
-            index.i -= 1;
-        
+    if(playPauseWorker.onPause()){
+        if(playPauseWorker.getIndex() > 0){
+            playPauseWorker.decreaseIndex();
+        }
+        else{
+            playPauseWorker.setIndex(playPauseWorker.data.text.length - 1,false);
+        }
         playPauseWorker.setText();
+        label_page.textContent = "Page: " + playPauseWorker.getIndex();
+        range_bar.value = playPauseWorker.getIndex();
     }
+}
+
+range_bar.oninput = function() {
+    if(playPauseWorker.onPause()){
+        playPauseWorker.setIndex(this.value);
+        playPauseWorker.setText();
+        label_page.textContent = "Page: " + playPauseWorker.getIndex();
+        range_bar.value = playPauseWorker.getIndex();
+    } 
+}
+
+// Keyboard Listener
+document.addEventListener('keyup', (e) => {
+    if (e.key === " " || e.code == "Space") buttonPlay();
+});
+
+// Keyboard Listener
+document.addEventListener('keypress', (e) => {
+    e.preventDefault();
+    if (e.key === "+") buttonIncRate();
+    else if (e.key === "-") buttonDecRate();
+});
+
+
+document.onkeydown = function checkKey(e) {
+
+    e = e || window.event;
+
+    if (e.keyCode == '38') {
+        // up arrow
+    }
+    else if (e.keyCode == '40') {
+        // down arrow
+    }
+    else if (e.keyCode == '37') {
+       // left arrow
+       buttonPreviousWord();
+    }
+    else if (e.keyCode == '39') {
+       // right arrow
+       buttonNextWord();
+    }
+};
+
+function resize (){
+    ipcRenderer.send('resize');
+}
+
+function goToMainMenu (){
+    ipcRenderer.send('main-menu');
 }

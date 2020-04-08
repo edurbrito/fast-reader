@@ -6,10 +6,22 @@ const utils = require('./utils.js')
 let win
 
 let start_reading = function() {
-  win.setSize(1000,200,true);
-  win.resizable = true;
-  // win.setMenu(null);
-  setTimeout(function(){win.loadFile("src/index.html");},100);
+  win.loadFile("src/index.html");
+}
+
+let resize = function() {
+  setTimeout(function(){
+    win.setSize(1000,200,true);
+    win.resizable = true;
+  },200);
+}
+
+let main_menu = function() {
+  win.loadFile("src/start.html");
+  setTimeout(function(){
+    win.setSize(800,700,true);
+    win.resizable = true;
+  },700);
 }
 
 function createWindow () {
@@ -37,7 +49,6 @@ function createWindow () {
     win = null
   })
 
-  start_reading();
   // win.setMenu(null);
 }
 
@@ -93,4 +104,12 @@ ipcMain.on('open-file-dialog', async() => {
 
 ipcMain.on("start-reading", function(event){
     start_reading();
+})
+
+ipcMain.on('resize', function(event){
+  resize();
+})
+
+ipcMain.on("main-menu", function(event){
+  main_menu();
 })

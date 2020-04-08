@@ -20,34 +20,33 @@ var data = {};
 function updateWord(){
     var currRate = rate;
 
-    index.i++;
-    data.index = index;
-
-    if (index.i == text.length){
+    if (index == text.length){
         postMessage(data);
         return;
     }
 
-    var word = text[index.i];
+    var word = text[index];
 
-    if (index.i > 0)
-        data.before_word = text[index.i - 1];
+    if (index > 0)
+        data.before_word = text[index - 1];
     else
         data.before_word = "";
     
     data.word = word;
     
-    if (index.i < text.length - 1)
-        data.after_word = text[index.i + 1];
+    if (index < text.length - 1)
+        data.after_word = text[index + 1];
     else
         data.after_word = "";
     
     if (word != undefined && (word.length <= 5 || word[word.length - 1] == '.')){
         currRate = rate * 2.2;
     }
-
+    
+    index++;
+    data.index = index
 
     postMessage(data);
-    if (index.i < text.length)
+    if (index < text.length)
         setTimeout(function(){updateWord()},currRate);
 }

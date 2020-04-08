@@ -95,6 +95,18 @@
         text-align: right;
       }
 
+      #resize {        
+        bottom: 10%;
+        position: fixed;
+        left: 10%;
+      }
+
+      #back-to-menu {        
+        bottom: 10%;
+        position: fixed;
+        right: 10%;
+      }
+
     </style>
   </head>
   <body>
@@ -131,7 +143,8 @@
         </div>
         <input type="range" class="custom-range" id="range-bar" value="0">
       </div>
-
+      <button type="button" class="btn btn-outline-dark rounded-circle controller" id="resize" onclick="resize()">^</button>
+      <button type="button" class="btn btn-outline-dark rounded-circle controller" id="back-to-menu" onclick="goToMainMenu()">x</button>
     <script src="controls.js"></script>
     <!-- Bootstrap Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
