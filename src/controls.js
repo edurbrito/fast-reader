@@ -1,4 +1,5 @@
 const {ipcRenderer} = require('electron');
+const {npages, text} = require('./readings.js');
 
 var before_word = document.getElementById('before-word');
 var word = document.getElementById('word');
@@ -8,19 +9,18 @@ var label_rate = document.getElementById('rate-value');
 var label_page = document.getElementById('page-index');
 var range_bar = document.getElementById('range-bar');
 
-var text = ["Eu","sou","eu","e","mais","ninguém","diligente","sábio","culto","aqui","só","para","mim."];
-// text = ["Her","life","in","the","confines","of","the","house","became","her","new","normal.", "I","want","more","detailed","information.","Charles","ate","the","french","fries","knowing","they","would","be","his","last","meal.","Buried","deep","in","the","snow,","he","hoped","his","batteries","were","fresh","in","his","avalanche","beacon.","They're","playing","the","piano","while","flying","in","the","plane.","The","beauty","of","the","African","sunset","disguised","the","danger","lurking","nearby.","The","sun","had","set","and","so","had","his","dreams.","She","works","two","jobs","to","make","ends","meet;","at","least,","that","was","her","reason","for","not","having","time","to","join","us.","8%","of","25","is","the","same","as","25%","of","8","and","one","of","them","is","much","easier","to","do","in","your","head.","I","checked","to","make","sure","that","he","was","still","alive."];
 var data = {index: 0, text: text, rate: 180};
 
 class PlayPauseWorker {
     
-    constructor(script,text,rate){
+    constructor(script,text,rate, npages){
         this.script = script;
-        this.data = {index: 0, text: text, rate: rate};
+        this.data = {index: 0, text: text, rate: rate, npages: npages};
         this.w = undefined;
         this.setText();
         range_bar.step = 1;
-        range_bar.max = this.data.text.length;
+        range_bar.min = 1;
+        range_bar.max = this.data.npages.length - 1;
     }
 
     initWorker = function(restart) {
@@ -55,8 +55,6 @@ class PlayPauseWorker {
             after_word.textContent = event.data.after_word;
             word.textContent = event.data.word;
             currWorker.setIndex(event.data.index,false);
-            label_page.textContent = "Page: " + playPauseWorker.getIndex();
-            range_bar.value = playPauseWorker.getIndex();
             if (currWorker.getIndex() == currWorker.data.text.length){
                 bPlay.textContent = "l>";
                 currWorker.setIndex(currWorker.data.text.length - 1,false);
@@ -64,8 +62,23 @@ class PlayPauseWorker {
         }
     };
 
+    setPageIndex = function(index) {
+        var pageindex = this.data.npages.indexOf(index);
+        if (pageindex != -1){
+            label_page.textContent = "Page: " + (pageindex + 1);
+            range_bar.value = pageindex + 1;
+        }
+    }
+
+    setPage = function(pageindex) {
+        label_page.textContent = "Page: " + (pageindex);
+        this.setIndex(this.data.npages[pageindex - 1],false);
+        this.setText();
+    }
+
     setIndex = function(index, run) {
         this.data.index = index;
+        this.setPageIndex(index);
         if (this.w != undefined && run)
             this.postMessage();
     }
@@ -75,11 +88,11 @@ class PlayPauseWorker {
     }
 
     increaseIndex = function() {
-        return this.data.index++;
+        this.setPageIndex(this.data.index++);
     }
 
     decreaseIndex = function() {
-        return this.data.index--;
+        this.setPageIndex(this.data.index--);
     }
 
     setRate = function (rate) {
@@ -128,7 +141,7 @@ class PlayPauseWorker {
     }
 }
 
-let playPauseWorker = new PlayPauseWorker("play-pause.js",text,180);
+let playPauseWorker = new PlayPauseWorker("play-pause.js",text,180,npages);
 
 function buttonPlay (){
     console.log(playPauseWorker.getIndex() == playPauseWorker.data.text.length - 1 );
@@ -176,17 +189,12 @@ function buttonPreviousWord (){
             playPauseWorker.setIndex(playPauseWorker.data.text.length - 1,false);
         }
         playPauseWorker.setText();
-        label_page.textContent = "Page: " + playPauseWorker.getIndex();
-        range_bar.value = playPauseWorker.getIndex();
     }
 }
 
 range_bar.oninput = function() {
     if(playPauseWorker.onPause()){
-        playPauseWorker.setIndex(this.value);
-        playPauseWorker.setText();
-        label_page.textContent = "Page: " + playPauseWorker.getIndex();
-        range_bar.value = playPauseWorker.getIndex();
+        playPauseWorker.setPage(this.value);
     } 
 }
 
