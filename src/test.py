@@ -28,7 +28,7 @@ for index, page in enumerate(pdf):
                 nst.append(i)
     pages.append(len(nst) - 1);
 
-pathf = "readings.js"
+pathf = "./src/readings.js"
 f = open(pathf, "w")
 f.write("let npages = " + str(pages) + ";")
 f.write("\nlet text = " + str(nst) + ";")
@@ -36,5 +36,5 @@ f.write("\nmodule.exports = {npages, text};")
 # for i in nst:
 #     f.write(i + '\n')
 f.close()
-print(os.path.abspath(pathf))
+print(0, end = '')
 sys.stdout.flush()

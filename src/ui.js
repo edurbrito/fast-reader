@@ -43,3 +43,11 @@ ipcRenderer.on('selected-file', function (event, path) {
         startReading.style.display = "none";
     }
 });
+
+//Getting back the information after selecting the file
+ipcRenderer.on('python-error', function (event, path) {
+
+    document.getElementById('chFileLabel').textContent = "An error occurred. Please, try again.";
+    startReading.style.display = "none";
+
+});

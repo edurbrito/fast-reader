@@ -75,6 +75,7 @@ app.on('activate', () => {
 })
 
 const dialog = require('electron').dialog;
+const spawn = require("child_process").spawn;
 
 ipcMain.on('open-file-dialog', async() => {
   
@@ -98,8 +99,17 @@ ipcMain.on('open-file-dialog', async() => {
   
     // Log the Files to the Console
     const filePath = files.filePaths[0];
-
-    win.webContents.send("selected-file", utils.shrinkPath(filePath));
+    var command = './src/frpy/bin/python3 ./src/test.py "' + filePath + '"';
+    console.log(command);
+    var pythonProcess = spawn('./src/frpy/bin/python3',["./src/test.py",filePath]);
+    pythonProcess.stdout.on('data', (data) => {
+      if (data.toString() == '0'){
+        win.webContents.send("selected-file", utils.shrinkPath(filePath));
+      }
+      else {
+        win.webContents.send("python-error", utils.shrinkPath(filePath));
+      }
+    });
 })
 
 ipcMain.on("start-reading", function(event){

@@ -3,3 +3,7 @@ node_modules/*
 fast-reader/
 
 .vscode/
+
+src/frpy/
+
+test/
