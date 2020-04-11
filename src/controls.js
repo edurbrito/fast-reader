@@ -1,6 +1,8 @@
 const {ipcRenderer} = require('electron');
 const {npages, text} = require('./readings.js');
 
+document.activeElement.blur();
+
 var before_word = document.getElementById('before-word');
 var word = document.getElementById('word');
 var after_word = document.getElementById('after-word');
@@ -33,10 +35,13 @@ class PlayPauseWorker {
             this.terminate();
             if (restart)
                 this.initWorker(false);
+            else    
+                range_bar.style = "pointer-events: auto;";
         }
     };
 
     postMessage = function(){
+        range_bar.style = "pointer-events: none;";
         this.w.postMessage(this.data);
     };
 
@@ -54,10 +59,9 @@ class PlayPauseWorker {
             before_word.textContent = event.data.before_word;
             after_word.textContent = event.data.after_word;
             word.textContent = event.data.word;
-            currWorker.setIndex(event.data.index,false);
-            if (currWorker.getIndex() == currWorker.data.text.length){
+            currWorker.setIndex(event.data.index - 1,false);
+            if (currWorker.getIndex() == currWorker.data.text.length - 1){
                 bPlay.textContent = "l>";
-                currWorker.setIndex(currWorker.data.text.length - 1,false);
             }
         }
     };
@@ -72,7 +76,11 @@ class PlayPauseWorker {
 
     setPage = function(pageindex) {
         label_page.textContent = "Page: " + (pageindex);
-        this.setIndex(this.data.npages[pageindex - 1],false);
+        var index = this.data.npages[pageindex - 1] + 1;
+        if(this.data.text[index] != undefined && index > 1)
+            this.setIndex(index,false);
+        else   
+            this.setIndex(index - 1,false);
         this.setText();
     }
 
@@ -88,11 +96,11 @@ class PlayPauseWorker {
     }
 
     increaseIndex = function() {
-        this.setPageIndex(this.data.index++);
+        this.setIndex(this.data.index + 1,false);
     }
 
     decreaseIndex = function() {
-        this.setPageIndex(this.data.index--);
+        this.setIndex(this.data.index - 1,false);
     }
 
     setRate = function (rate) {
@@ -144,7 +152,6 @@ class PlayPauseWorker {
 let playPauseWorker = new PlayPauseWorker("play-pause.js",text,180,npages);
 
 function buttonPlay (){
-    console.log(playPauseWorker.getIndex() == playPauseWorker.data.text.length - 1 );
     if (playPauseWorker.getIndex() == 0 || playPauseWorker.getIndex() == playPauseWorker.data.text.length - 1){ // It means that text has not STARTed 
         playPauseWorker.setIndex(0,false);
         playPauseWorker.initWorker(true); 
@@ -152,16 +159,19 @@ function buttonPlay (){
     else{
         playPauseWorker.initWorker(false);
     } 
+    document.activeElement.blur();
 }
 
 function buttonIncRate (){
     playPauseWorker.increaseRate();
     label_rate.textContent = "Rate: " + playPauseWorker.getRate();
+    document.activeElement.blur();
 }
 
 function buttonDecRate (){
     playPauseWorker.decreaseRate();
     label_rate.textContent = "Rate: " + playPauseWorker.getRate();
+    document.activeElement.blur();
 }
 
 function buttonNextWord (){
@@ -173,10 +183,8 @@ function buttonNextWord (){
             playPauseWorker.setIndex(0,false);
         }
         playPauseWorker.setText();
-        label_page.textContent = "Page: " + playPauseWorker.getIndex();
-        range_bar.value = playPauseWorker.getIndex();
-
     }
+    document.activeElement.blur();
 }
 
 function buttonPreviousWord (){
@@ -190,6 +198,7 @@ function buttonPreviousWord (){
         }
         playPauseWorker.setText();
     }
+    document.activeElement.blur();
 }
 
 range_bar.oninput = function() {
