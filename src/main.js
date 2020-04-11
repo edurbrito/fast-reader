@@ -99,8 +99,6 @@ ipcMain.on('open-file-dialog', async() => {
   
     // Log the Files to the Console
     const filePath = files.filePaths[0];
-    var command = './src/frpy/bin/python3 ./src/test.py "' + filePath + '"';
-    console.log(command);
     var pythonProcess = spawn('./src/frpy/bin/python3',["./src/test.py",filePath]);
     pythonProcess.stdout.on('data', (data) => {
       if (data.toString() == '0'){

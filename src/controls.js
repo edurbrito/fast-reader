@@ -23,6 +23,7 @@ class PlayPauseWorker {
         range_bar.step = 1;
         range_bar.min = 1;
         range_bar.max = this.data.npages.length - 1;
+        range_bar.value = 1;
     }
 
     initWorker = function(restart) {
@@ -67,7 +68,10 @@ class PlayPauseWorker {
     };
 
     setPageIndex = function(index) {
-        var pageindex = this.data.npages.indexOf(index);
+        var elem = this.data.npages.findIndex(function(val){
+            return val >= index;
+        });
+        var pageindex = elem - 1;
         if (pageindex != -1){
             label_page.textContent = "Page: " + (pageindex + 1);
             range_bar.value = pageindex + 1;
@@ -82,6 +86,19 @@ class PlayPauseWorker {
         else   
             this.setIndex(index - 1,false);
         this.setText();
+    }
+
+    increasePage = function() {
+        var index = this.data.index;
+        var elem = this.data.npages.findIndex(function(val){
+            return val >= index;
+        });
+        var pageindex = elem + 1;
+        this.setPage(pageindex);
+    }
+
+    getPageIndex = function() {
+        return range_bar.value;
     }
 
     setIndex = function(index, run) {
@@ -199,6 +216,12 @@ function buttonPreviousWord (){
         playPauseWorker.setText();
     }
     document.activeElement.blur();
+}
+
+function buttonNextPage (){
+}
+
+function buttonPreviousPage (){
 }
 
 range_bar.oninput = function() {
