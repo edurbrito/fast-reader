@@ -1,3 +1,10 @@
+/** @module utils */
+
+/**
+ * Shrinks the @param path, leaving only the file name
+ * @param {string} path The string path to be reduced
+ * @returns {string} A new string, now shrunk
+ */
 function shrinkPath(path) {
   var newPath = new String(path);
   

@@ -1,20 +1,14 @@
+/** @module ui */
+
 const {ipcRenderer} = require('electron');
 
-function chooseFile() {
-    ipcRenderer.send('open-file-dialog');
-}
-
-function startReading() {
-    var elem = document.getElementById("mainContainer");
-    elem.style.animationFillMode = "forwards";
-    animateCSS(elem,
-    "slideOutUp",
-    function() {
-        elem.style.display = "none";
-        ipcRenderer.send('start-reading');
-    });
-}
-
+/**
+ * Animates the @param element with an @param animationName 
+ * type of animation, and then executes @param callback
+ * @param {document.element} element The element to be animated
+ * @param {string} animationName The type of animation to be added
+ * @param {function} callback The callback function to be executed after
+ */
 function animateCSS(element, animationName, callback) {
     const node = element
     node.classList.add('animated', animationName)
@@ -29,7 +23,34 @@ function animateCSS(element, animationName, callback) {
     node.addEventListener('animationend', handleAnimationEnd)
 }
 
-//Getting back the information after selecting the file
+/**
+ * Called when clicked the button to open file dialog,
+ * sending a signal to ipcMain to open the file dialog
+ * @fires open-file-dialog
+ */
+function chooseFile() {
+    ipcRenderer.send('open-file-dialog');
+}
+
+/**
+ * Called when clicked the button to start the reader
+ * @fires start-reading
+ */
+function startReading() {
+    var elem = document.getElementById("mainContainer");
+    elem.style.animationFillMode = "forwards";
+    animateCSS(elem,
+    "slideOutUp",
+    function() {
+        elem.style.display = "none";
+        ipcRenderer.send('start-reading');
+    });
+}
+
+/**
+ * Getting back the information after selecting the file
+ * @event selected-file
+ */
 ipcRenderer.on('selected-file', function(event, path) {
     
     var startReading = document.getElementById('startReading');
@@ -45,7 +66,10 @@ ipcRenderer.on('selected-file', function(event, path) {
     }
 });
 
-//Getting back the information after selecting the file
+/**
+ * If an error occurred when parsing the pdf file
+ * @event python-error
+ */
 ipcRenderer.on('python-error', function(event, path) {
 
     document.getElementById('chFileLabel').textContent = "An error occurred. Please, try again.";
