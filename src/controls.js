@@ -119,13 +119,16 @@ class PlayPauseWorker {
      * @param index The word index to calculate the current page index
      */
     setPageIndex = function(index) {
-        var elem = this.data.npages.findIndex( function(val) {
+        var elem = this.data.npages.find( function(val) {
+            if (index > 0)
+                return val > index - 1;
             return val > index;
+                
         });
-
+        
         if (elem > -1) {
-            label_page.textContent = "Page: " + (elem);
-            range_bar.value = elem;
+            label_page.textContent = "Page: " + (this.data.npages.indexOf(elem));
+            range_bar.value = (this.data.npages.indexOf(elem));
         }
     }
 
@@ -330,6 +333,7 @@ range_bar.oninput = function() {
     if (playPauseWorker.onPause()) {
         playPauseWorker.setPage(this.value);
     } 
+    document.activeElement.blur();
 }
 
 /**

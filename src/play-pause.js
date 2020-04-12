@@ -60,5 +60,5 @@ function updateWord() {
     if (index < text.length)
         setTimeout( function() {
             updateWord();
-        },currRate);
+            },currRate);
 }
