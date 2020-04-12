@@ -2,7 +2,7 @@ var text;
 var index;
 var rate;
 
-self.addEventListener('message' , function(e){
+self.addEventListener('message' , function(e) {
     
     var init = false;
     if (text == undefined)
@@ -17,10 +17,10 @@ self.addEventListener('message' , function(e){
 
 var data = {};
 
-function updateWord(){
+function updateWord() {
     var currRate = rate;
 
-    if (index == text.length){
+    if (index == text.length) {
         postMessage(data);
         return;
     }
@@ -39,7 +39,7 @@ function updateWord(){
     else
         data.after_word = "";
     
-    if (word != undefined && (word.length <= 2 || word.length >= 6 || word[word.length - 1] == '.')){
+    if (word != undefined && (word.length <= 2 || word.length >= 6 || word[word.length - 1] == '.')) {
         currRate = rate * 2.2;
     }
     
@@ -48,5 +48,7 @@ function updateWord(){
 
     postMessage(data);
     if (index < text.length)
-        setTimeout(function(){updateWord()},currRate);
+        setTimeout( function() {
+            updateWord();
+        },currRate);
 }

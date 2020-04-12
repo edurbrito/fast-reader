@@ -1,7 +1,7 @@
-function shrinkPath(path){
+function shrinkPath(path) {
   var newPath = new String(path);
   
-  for (var i = newPath.length; i >= 0; i--){
+  for (var i = newPath.length; i >= 0; i--) {
     if (newPath.charAt(i) == '/' || newPath.charAt(i) == '\\')
       break;
   }

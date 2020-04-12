@@ -10,7 +10,7 @@ let start_reading = function() {
 }
 
 let resize = function() {
-  setTimeout(function(){
+  setTimeout( function() {
     win.setSize(1000,200,true);
     win.resizable = true;
   },200);
@@ -18,15 +18,15 @@ let resize = function() {
 
 let main_menu = function() {
   win.loadFile("src/start.html");
-  setTimeout(function(){
+  setTimeout( function() {
     win.setSize(800,700,true);
     win.resizable = true;
   },700);
 }
 
-function createWindow () {
+function createWindow() {
   // Create the browser window.
-  win = new BrowserWindow({
+  win = new BrowserWindow( {
     width: 800,
     height: 700,
     webPreferences: {
@@ -101,7 +101,7 @@ ipcMain.on('open-file-dialog', async() => {
     const filePath = files.filePaths[0];
     var pythonProcess = spawn('./src/frpy/bin/python3',["./src/test.py",filePath]);
     pythonProcess.stdout.on('data', (data) => {
-      if (data.toString() == '0'){
+      if (data.toString() == '0') {
         win.webContents.send("selected-file", utils.shrinkPath(filePath));
       }
       else {
@@ -110,14 +110,14 @@ ipcMain.on('open-file-dialog', async() => {
     });
 })
 
-ipcMain.on("start-reading", function(event){
+ipcMain.on("start-reading", function(event) {
     start_reading();
 })
 
-ipcMain.on('resize', function(event){
+ipcMain.on('resize', function(event) {
   resize();
 })
 
-ipcMain.on("main-menu", function(event){
+ipcMain.on("main-menu", function(event) {
   main_menu();
 })
