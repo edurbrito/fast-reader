@@ -5,7 +5,8 @@
   "main": "src/main.js",
   "scripts": {
     "test": "mocha",
-    "start": "electron ."
+    "start": "electron .",
+    "generate-docs": "jsdoc ./src/*.js"
   },
   "author": "",
   "license": "ISC",
@@ -18,6 +19,7 @@
     "popper.js": "^1.16.1"
   },
   "devDependencies": {
+    "jsdoc": "^3.6.4",
     "mocha": "^7.1.1"
   }
 }
