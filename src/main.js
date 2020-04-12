@@ -26,7 +26,7 @@ let start_reading = function() {
  */
 let resize = function() {
   setTimeout( function() {
-    win.setSize(1000,200,true);
+    win.setSize(1200,200,true);
     win.resizable = true;
   },200);
 }
@@ -120,20 +120,21 @@ ipcMain.on('open-file-dialog', async() => {
     const files = await dialog.showOpenDialog({
       // The Configuration object sets different properties on the Open File Dialog 
       properties: ['openFile'],
-      filters: [{name: 'PDF files', extensions: ['pdf']}]
+      filters: [{name: 'PDF files', extensions: ['pdf']},
+                {name: 'Text-based files', extensions: ['txt','md','log']}]
     });
   
     // If we don't have any files, return early from the function
     if (!files) {
         return;
     }
-  
+
     // Pulls the first file out of the array
     const filePath = files.filePaths[0];
 
     // Calls the python process responsible for reading 
     // the pdf file and converting it into an array of words
-    var pythonProcess = spawn('./src/frpy/bin/python3',["./src/test.py",filePath]);
+    var pythonProcess = spawn('./src/frpy/bin/python3',["./src/parser.py",filePath]);
 
     // Receives the exit code from the python process
     // 0 if it's everything OK, other value if an ERROR occurred
