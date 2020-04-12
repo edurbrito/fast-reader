@@ -1,7 +1,13 @@
+/** @module play-pause */
+
 var text;
 var index;
 var rate;
 
+/** 
+ * Receives a Message from the Worker
+ * @event message
+ */
 self.addEventListener('message' , function(e) {
     
     var init = false;
@@ -17,6 +23,10 @@ self.addEventListener('message' , function(e) {
 
 var data = {};
 
+/** 
+ * Sends the updated data to the Worker
+ * @fires message
+ */
 function updateWord() {
     var currRate = rate;
 
