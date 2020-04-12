@@ -15,7 +15,7 @@ var data = {index: 0, text: text, rate: 180};
 
 class PlayPauseWorker {
     
-    constructor(script,text,rate, npages){
+    constructor(script,text,rate, npages) {
         this.script = script;
         this.data = {index: 0, text: text, rate: rate, npages: npages};
         this.w = undefined;
@@ -27,12 +27,12 @@ class PlayPauseWorker {
     }
 
     initWorker = function(restart) {
-        if (this.w == undefined){
+        if (this.w == undefined) {
             this.w = new Worker(this.script);
             this.onmessage();
             this.postMessage();            
         }
-        else{
+        else {
             this.terminate();
             if (restart)
                 this.initWorker(false);
@@ -41,7 +41,7 @@ class PlayPauseWorker {
         }
     };
 
-    postMessage = function(){
+    postMessage = function() {
         range_bar.style = "pointer-events: none;";
         this.w.postMessage(this.data);
     };
@@ -55,24 +55,24 @@ class PlayPauseWorker {
 
     onmessage = function() {
         let currWorker = this;
-        this.w.onmessage = function(event){
+        this.w.onmessage = function(event) {
             bPlay.textContent = "ll";
             before_word.textContent = event.data.before_word;
             after_word.textContent = event.data.after_word;
             word.textContent = event.data.word;
             currWorker.setIndex(event.data.index - 1,false);
-            if (currWorker.getIndex() == currWorker.data.text.length - 1){
+            if (currWorker.getIndex() == currWorker.data.text.length - 1) {
                 bPlay.textContent = "l>";
             }
         }
     };
 
     setPageIndex = function(index) {
-        var elem = this.data.npages.findIndex(function(val){
+        var elem = this.data.npages.findIndex( function(val) {
             return val >= index;
         });
         var pageindex = elem - 1;
-        if (pageindex != -1){
+        if (pageindex != -1) {
             label_page.textContent = "Page: " + (pageindex + 1);
             range_bar.value = pageindex + 1;
         }
@@ -81,7 +81,7 @@ class PlayPauseWorker {
     setPage = function(pageindex) {
         label_page.textContent = "Page: " + (pageindex);
         var index = this.data.npages[pageindex - 1] + 1;
-        if(this.data.text[index] != undefined && index > 1)
+        if (this.data.text[index] != undefined && index > 1)
             this.setIndex(index,false);
         else   
             this.setIndex(index - 1,false);
@@ -90,7 +90,7 @@ class PlayPauseWorker {
 
     increasePage = function() {
         var index = this.data.index;
-        var elem = this.data.npages.findIndex(function(val){
+        var elem = this.data.npages.findIndex( function(val) {
             return val >= index;
         });
         var pageindex = elem + 1;
@@ -108,7 +108,7 @@ class PlayPauseWorker {
             this.postMessage();
     }
 
-    getIndex = function () {
+    getIndex = function() {
         return this.data.index;
     }
 
@@ -120,33 +120,33 @@ class PlayPauseWorker {
         this.setIndex(this.data.index - 1,false);
     }
 
-    setRate = function (rate) {
+    setRate = function(rate) {
         this.data.rate = rate;
         if (this.w != undefined)
             this.postMessage();
     }
 
-    getRate = function (){
+    getRate = function() {
         return this.data.rate;
     }
 
-    increaseRate = function (){
-        if (this.data.rate > 10){
+    increaseRate = function() {
+        if (this.data.rate > 10) {
             this.data.rate -= 10;
             if (this.w != undefined)
                 this.postMessage();
         }
     }
 
-    decreaseRate = function (){
-        if (this.data.rate < 300){
+    decreaseRate = function() {
+        if (this.data.rate < 300) {
             this.data.rate += 10;
             if (this.w != undefined)
                 this.postMessage();
         }
     }
 
-    setText = function(){
+    setText = function() {
         var i = this.data.index
         if (i > 0)
             before_word.textContent = this.data.text[i - 1];
@@ -168,35 +168,35 @@ class PlayPauseWorker {
 
 let playPauseWorker = new PlayPauseWorker("play-pause.js",text,180,npages);
 
-function buttonPlay (){
-    if (playPauseWorker.getIndex() == 0 || playPauseWorker.getIndex() == playPauseWorker.data.text.length - 1){ // It means that text has not STARTed 
+function buttonPlay() {
+    if (playPauseWorker.getIndex() == 0 || playPauseWorker.getIndex() == playPauseWorker.data.text.length - 1) { // It means that text has not STARTed 
         playPauseWorker.setIndex(0,false);
         playPauseWorker.initWorker(true); 
     }
-    else{
+    else {
         playPauseWorker.initWorker(false);
     } 
     document.activeElement.blur();
 }
 
-function buttonIncRate (){
+function buttonIncRate() {
     playPauseWorker.increaseRate();
     label_rate.textContent = "Rate: " + playPauseWorker.getRate();
     document.activeElement.blur();
 }
 
-function buttonDecRate (){
+function buttonDecRate() {
     playPauseWorker.decreaseRate();
     label_rate.textContent = "Rate: " + playPauseWorker.getRate();
     document.activeElement.blur();
 }
 
-function buttonNextWord (){
-    if(playPauseWorker.onPause()){
-        if(playPauseWorker.getIndex() < playPauseWorker.data.text.length - 1){
+function buttonNextWord() {
+    if (playPauseWorker.onPause()) {
+        if (playPauseWorker.getIndex() < playPauseWorker.data.text.length - 1) {
             playPauseWorker.increaseIndex();
         }
-        else{
+        else {
             playPauseWorker.setIndex(0,false);
         }
         playPauseWorker.setText();
@@ -204,13 +204,13 @@ function buttonNextWord (){
     document.activeElement.blur();
 }
 
-function buttonPreviousWord (){
+function buttonPreviousWord() {
 
-    if(playPauseWorker.onPause()){
-        if(playPauseWorker.getIndex() > 0){
+    if (playPauseWorker.onPause()) {
+        if (playPauseWorker.getIndex() > 0) {
             playPauseWorker.decreaseIndex();
         }
-        else{
+        else {
             playPauseWorker.setIndex(playPauseWorker.data.text.length - 1,false);
         }
         playPauseWorker.setText();
@@ -218,42 +218,33 @@ function buttonPreviousWord (){
     document.activeElement.blur();
 }
 
-function buttonNextPage (){
-}
-
-function buttonPreviousPage (){
-}
-
 range_bar.oninput = function() {
-    if(playPauseWorker.onPause()){
+    if (playPauseWorker.onPause()) {
         playPauseWorker.setPage(this.value);
     } 
 }
 
 // Keyboard Listener
 document.addEventListener('keyup', (e) => {
-    if (e.key === " " || e.code == "Space") buttonPlay();
+    if (e.key === " " || e.code == "Space") 
+        buttonPlay();
 });
 
 // Keyboard Listener
 document.addEventListener('keypress', (e) => {
     e.preventDefault();
-    if (e.key === "+") buttonIncRate();
-    else if (e.key === "-") buttonDecRate();
-});
+    if (e.key === "+") 
+        buttonIncRate();
 
+    else if (e.key === "-") 
+        buttonDecRate();
+});
 
 document.onkeydown = function checkKey(e) {
 
     e = e || window.event;
 
-    if (e.keyCode == '38') {
-        // up arrow
-    }
-    else if (e.keyCode == '40') {
-        // down arrow
-    }
-    else if (e.keyCode == '37') {
+    if (e.keyCode == '37') {
        // left arrow
        buttonPreviousWord();
     }
@@ -263,10 +254,10 @@ document.onkeydown = function checkKey(e) {
     }
 };
 
-function resize (){
+function resize() {
     ipcRenderer.send('resize');
 }
 
-function goToMainMenu (){
+function goToMainMenu() {
     ipcRenderer.send('main-menu');
 }
