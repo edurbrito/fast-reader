@@ -1,8 +1,28 @@
 const { app, BrowserWindow , ipcMain } = require('electron')
+const utils = require('./utils.js')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
+
+let start_reading = function() {
+  win.loadFile("src/index.html");
+}
+
+let resize = function() {
+  setTimeout(function(){
+    win.setSize(1000,200,true);
+    win.resizable = true;
+  },200);
+}
+
+let main_menu = function() {
+  win.loadFile("src/start.html");
+  setTimeout(function(){
+    win.setSize(800,700,true);
+    win.resizable = true;
+  },700);
+}
 
 function createWindow () {
   // Create the browser window.
@@ -35,7 +55,7 @@ function createWindow () {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+app.on('ready', createWindow);
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
@@ -54,11 +74,8 @@ app.on('activate', () => {
   }
 })
 
-function shrinkPath(path){
-  return new String(path);
-}
-
 const dialog = require('electron').dialog;
+const spawn = require("child_process").spawn;
 
 ipcMain.on('open-file-dialog', async() => {
   
@@ -82,15 +99,25 @@ ipcMain.on('open-file-dialog', async() => {
   
     // Log the Files to the Console
     const filePath = files.filePaths[0];
-
-
-
-    win.webContents.send("selected-file", filePath);
-
+    var pythonProcess = spawn('./src/frpy/bin/python3',["./src/test.py",filePath]);
+    pythonProcess.stdout.on('data', (data) => {
+      if (data.toString() == '0'){
+        win.webContents.send("selected-file", utils.shrinkPath(filePath));
+      }
+      else {
+        win.webContents.send("python-error", utils.shrinkPath(filePath));
+      }
+    });
 })
 
 ipcMain.on("start-reading", function(event){
-    win.resizable = true;
-    win.setSize(800,300,true);
-    setTimeout(function(){ win.loadFile("src/index.html");},200);
+    start_reading();
+})
+
+ipcMain.on('resize', function(event){
+  resize();
+})
+
+ipcMain.on("main-menu", function(event){
+  main_menu();
 })

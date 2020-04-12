@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>App</title>
+    <title>Fast Reader</title>
     <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval' ;" />
     <!-- Bootstrap CSS  
@@ -15,16 +15,137 @@
     <link rel="stylesheet" href="../node_modules/animate.css/animate.min.css">
     <link rel="stylesheet" href="../node_modules/animate.css/animate.min.css">
     <style>
+      /* width */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
 
-    body {
+      /* Track */
+      ::-webkit-scrollbar-track {
+        background: #000000; 
+      }
+      
+      /* Handle */
+      ::-webkit-scrollbar-thumb {
+        background: #888; 
+      }
+
+      /* Handle on hover */
+      ::-webkit-scrollbar-thumb:hover {
+        background: #555; 
+      }
+
+      body {
+        background-color: black;
+        color: white;      
         width: 100vw;
         height: 100vh;
-    }
-    
+        font-family: 'Montserrat';
+      }
+      
+      .v-middle{
+        align-items:center;
+        display: grid;
+      }
+
+      #control-panel {
+        width: 100%; 
+        bottom: 10%;
+        position: fixed;
+        padding-left: 20%;
+        padding-right: 20%;
+      }
+
+      #word-reader {
+        width: 100%; 
+        text-align: center;
+        font-size: 100px;
+        bottom: 62%; 
+        position: fixed;
+      }
+
+      .custom-range::-webkit-slider-thumb {
+        background: #212529;
+        height: 10px;
+      }
+
+      .custom-range::-webkit-slider-runnable-track {
+        background-color: #343a40;
+        height: 2px;
+      }
+
+      .controller {
+        margin: 2px;
+        padding: 6px 12px 6px 12px;
+      }
+
+      #panel-info {
+        width: 100%;
+        color: #212529;
+        text-align: center;
+        margin-top: 0px;
+        margin-bottom: 0px;
+      }
+
+      #page-index {
+        text-align: left;
+      }
+
+      #rate-value {
+        text-align: right;
+      }
+
+      #resize {        
+        bottom: 10%;
+        position: fixed;
+        left: 10%;
+      }
+
+      #back-to-menu {        
+        bottom: 10%;
+        position: fixed;
+        right: 10%;
+      }
+
     </style>
   </head>
   <body>
-    <span style="width: 100%; height: 10%; bottom: 0; position: fixed;">HI</span>
+      <div id="word-reader">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm v-middle" style="text-align: right; font-size: 24px; opacity: 0.2;" id="before-word">
+              
+            </div>
+            <div class="col-sm v-middle" style="font-size: 50%; flex: 0 0 300px;" id="word">
+              START
+            </div>
+            <div class="col-sm v-middle" style="text-align: left; font-size: 24px; opacity: 0.1;" id="after-word">
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="control-panel">
+        <div class="container-sm" style="text-align: center;">
+          <button type="button" class="btn btn-outline-dark rounded-circle controller" onclick="buttonPreviousPage()"><<</button>
+          <button type="button" class="btn btn-outline-dark rounded-circle controller" onclick="buttonPreviousWord()"><</button>
+          <button type="button" class="btn btn-outline-dark rounded-circle controller" onclick="buttonDecRate()">-</button>
+          <button type="button" class="btn btn-outline-dark rounded-circle controller" id="btn-play" onclick="buttonPlay()">l></button>
+          <button type="button" class="btn btn-outline-dark rounded-circle controller" onclick="buttonIncRate()">+</button>
+          <button type="button" class="btn btn-outline-dark rounded-circle controller" onclick="buttonNextWord()">></button>
+          <button type="button" class="btn btn-outline-dark rounded-circle controller" onclick="buttonNextPage()">>></button>
+        </div> 
+        <div class="container-sm" id="panel-info">
+          <div class="row">
+            <div id="page-index" class="col">Page: 1</div>
+            <div id="rate-value" class="col">Rate: 180</div>
+          </div>
+        </div>
+        <input type="range" class="custom-range" id="range-bar" value="0">
+      </div>
+      <button type="button" class="btn btn-outline-dark rounded-circle controller" id="resize" onclick="resize()">^</button>
+      <button type="button" class="btn btn-outline-dark rounded-circle controller" id="back-to-menu" onclick="goToMainMenu()">x</button>
+    <script src="controls.js"></script>
     <!-- Bootstrap Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script>let $ = require('jquery');</script>
