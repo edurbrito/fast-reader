@@ -7,3 +7,5 @@ fast-reader/
 src/frpy/
 
 test/
+
+logs/

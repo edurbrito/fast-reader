@@ -38,7 +38,7 @@ let resize = function() {
 let main_menu = function() {
   win.loadFile("src/start.html");
   setTimeout( function() {
-    win.setSize(800,700,true);
+    win.setSize(1000,700,true);
     win.resizable = true;
   },700);
 }
@@ -50,7 +50,7 @@ let main_menu = function() {
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow( {
-    width: 800,
+    width: 900,
     height: 700,
     webPreferences: {
       nodeIntegration: true
