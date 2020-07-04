@@ -64,8 +64,9 @@ There are the corresponding buttons in the interface which also contains some ot
 
 ## Contributing
 
-**Contributions are all welcome!** 
+**Contributions are all welcome!**
 
+If you are interested in reporting/fixing issues and contributing directly to the code base, please submit a Pull Request. Every contribution is appreciated!
 
 ## License
 
