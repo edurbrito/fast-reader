@@ -1,4 +1,4 @@
-node_modules/*
+node_modules/
 
 fast-reader/
 
@@ -7,3 +7,5 @@ fast-reader/
 src/frpy/
 
 test/
+
+logs/
