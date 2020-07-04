@@ -1,15 +1,26 @@
 {
   "name": "fast-reader",
-  "version": "0.0.1",
+  "version": "1.2.1",
   "description": "A tool for fast reading pdf docs",
   "main": "src/main.js",
   "scripts": {
     "test": "mocha",
     "start": "electron .",
-    "generate-docs": "jsdoc ./src/*.js"
+    "generate-docs": "jsdoc ./src/*.js",
+    "pretest": "eslint . --fix"
   },
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "gui",
+    "pdf",
+    "reader",
+    "electron"
+  ],
+  "author": "edurbrito",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/edurbrito/fast-reader.git"
+  },
   "dependencies": {
     "animate.css": "^3.7.2",
     "bootstrap": "^4.4.1",
@@ -19,6 +30,12 @@
     "popper.js": "^1.16.1"
   },
   "devDependencies": {
+    "eslint": "^7.4.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
     "jsdoc": "^3.6.4",
     "mocha": "^7.1.1"
   }
