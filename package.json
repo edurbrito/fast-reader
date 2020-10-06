@@ -24,7 +24,7 @@
   "dependencies": {
     "animate.css": "^3.7.2",
     "bootstrap": "^4.4.1",
-    "electron": "^8.2.4",
+    "electron": "^8.5.2",
     "jquery": "^3.5.0",
     "path": "^0.12.7",
     "popper.js": "^1.16.1"
